@@ -1,0 +1,85 @@
+/*
+ * TOKENS DE DISEÑO — punto único para colores, tipografía, espaciados, radios y sombras.
+ * Cambia estos valores para ajustar la identidad visual de toda la interfaz.
+ */
+:root {
+  color-scheme: light;
+
+  /* Superficies y texto */
+  --color-fondo: #f3f5f8;
+  --color-superficie: #ffffff;
+  --color-superficie-2: #f8fafc;
+  --color-borde: #dde3eb;
+  --color-borde-fuerte: #c3ccd8;
+  --color-texto: #18212f;
+  --color-texto-suave: #556175;
+  --color-texto-tenue: #8792a4;
+
+  /* Marca */
+  --color-primario: #1c3d6e;
+  --color-primario-hover: #142d53;
+  --color-primario-suave: #e6edf7;
+  --color-acento: #c8102e;
+  --color-foco: #3b82f6;
+
+  /* Estados de stock y alertas */
+  --color-ok: #17734a;
+  --color-ok-suave: #e2f3ea;
+  --color-bajo: #8f5300;
+  --color-bajo-suave: #fff1d1;
+  --color-sin: #b42318;
+  --color-sin-suave: #fde6e3;
+  --color-vence: #6a3d9a;
+  --color-vence-suave: #efe8f9;
+  --color-inactivo: #5b6678;
+  --color-inactivo-suave: #eceff3;
+
+  /* Tipos de movimiento */
+  --color-entrada: #17734a;
+  --color-salida: #b42318;
+  --color-traslado: #1c3d6e;
+  --color-ajuste: #8f5300;
+
+  /* Aviso de demostración */
+  --color-demo: #7a4a00;
+  --color-demo-suave: #fff4d4;
+  --color-demo-borde: #f1d48a;
+
+  /* Tipografía */
+  --fuente-base: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --fuente-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --texto-xs: 0.75rem;
+  --texto-sm: 0.8125rem;
+  --texto-md: 0.9375rem;
+  --texto-lg: 1.125rem;
+  --texto-xl: 1.5rem;
+  --texto-kpi: 1.875rem;
+  --peso-normal: 400;
+  --peso-medio: 550;
+  --peso-fuerte: 680;
+  --interlineado: 1.45;
+
+  /* Espaciados */
+  --esp-1: 4px;
+  --esp-2: 8px;
+  --esp-3: 12px;
+  --esp-4: 16px;
+  --esp-5: 24px;
+  --esp-6: 32px;
+
+  /* Formas y profundidad */
+  --radio-sm: 6px;
+  --radio-md: 10px;
+  --radio-lg: 14px;
+  --radio-pill: 999px;
+  --sombra-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --sombra-md: 0 4px 16px rgba(16, 24, 40, 0.08);
+  --sombra-lg: 0 24px 56px rgba(16, 24, 40, 0.24);
+
+  /* Layout */
+  --ancho-nav: 216px;
+  --ancho-max: 1360px;
+  --alto-topbar: 60px;
+  --ancho-dialogo: 760px;
+  --transicion: 150ms ease;
+}

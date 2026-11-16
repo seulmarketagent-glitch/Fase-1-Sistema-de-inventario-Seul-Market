@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Prototipo de interfaz de inventario de Seúl Market con datos de demostración.">
+  <title>Sistema de inventario · Seúl Market (demo)</title>
+
+  <!-- Estilos: tokens (variables) → base/layout → componentes -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="marca">
+        <span class="marca-logo" aria-hidden="true">SM</span>
+        <div class="marca-textos">
+          <span class="marca-nombre" id="marca-nombre"></span>
+          <span class="marca-sub" id="marca-sub"></span>
+        </div>
+      </div>
+      <span class="insignia insignia-demo insignia-topbar" id="insignia-demo"></span>
+      <div class="topbar-acciones" id="topbar-acciones"></div>
+    </header>
+
+    <nav class="nav" id="nav" aria-label="Secciones"></nav>
+
+    <main class="vista" id="vista" tabindex="-1"></main>
+
+    <footer class="pie" id="pie"></footer>
+  </div>
+
+  <dialog class="dialogo" id="dlg-movimiento" aria-label="Registrar movimiento"></dialog>
+  <dialog class="dialogo" id="dlg-detalle" aria-labelledby="dlg-detalle-titulo"></dialog>
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <noscript>Esta interfaz necesita JavaScript habilitado.</noscript>
+
+  <!--
+    Orden de carga (scripts clásicos, sin compilación; funciona abriendo el archivo con doble clic):
+    utilidades → configuración → modelo → datos demo → componentes → vistas → app
+  -->
+  <script src="js/util.js"></script>
+  <script src="js/config/catalogos.js"></script>
+  <script src="js/config/textos.js"></script>
+  <script src="js/modelo/conversiones.js"></script>
+  <script src="js/modelo/inventario.js"></script>
+  <script src="js/modelo/movimientos.js"></script>
+  <script src="js/datos/demo.js"></script>
+  <script src="js/ui/componentes.js"></script>
+  <script src="js/config/columnas.js"></script>
+  <script src="js/ui/resumen.js"></script>
+  <script src="js/ui/productos.js"></script>
+  <script src="js/ui/movimientos.js"></script>
+  <script src="js/ui/alertas.js"></script>
+  <script src="js/ui/detalleProducto.js"></script>
+  <script src="js/ui/formularioMovimiento.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
