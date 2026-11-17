@@ -43,7 +43,7 @@ SI.app = (function () {
     document.getElementById('pie').innerHTML = `
       <div class="pie-textos">
         <p><span class="insignia insignia-demo">${esc(A.insigniaDemo)}</span> ${esc(A.avisoDemo)}</p>
-        <p>${esc(SI.inventario.persistente ? A.avisoPersistencia : A.avisoSinPersistencia)}</p>
+        <p>${esc(SI.repositorio.persistente ? A.avisoPersistencia : A.avisoSinPersistencia)}</p>
       </div>
       ${SI.ui.boton(A.restablecer, 'restablecer', {}, 'btn btn-chico')}`;
   }
@@ -102,22 +102,35 @@ SI.app = (function () {
         break;
       }
       case 'restablecer':
-        if (window.confirm(SI.textos.app.confirmarRestablecer)) {
-          SI.inventario.restablecer();
-          SI.vistas.productos.limpiarFiltros();
-          SI.vistas.movimientos.limpiarFiltros();
-          refrescar();
-          SI.ui.toast(SI.textos.app.restablecido, 'ok');
-        }
+        if (window.confirm(SI.textos.app.confirmarRestablecer)) restablecer();
         break;
       default:
         break;
     }
   }
 
-  function iniciar() {
-    SI.inventario.cargar();
+  async function restablecer() {
+    try {
+      await SI.repositorio.restablecer();
+    } catch (e) {
+      SI.ui.toast(SI.textos.app.errorDatos, 'error');
+      return;
+    }
+    SI.vistas.productos.limpiarFiltros();
+    SI.vistas.movimientos.limpiarFiltros();
+    refrescar();
+    SI.ui.toast(SI.textos.app.restablecido, 'ok');
+  }
+
+  async function iniciar() {
     pintarMarca();
+    try {
+      await SI.repositorio.cargar();
+    } catch (e) {
+      document.getElementById('vista').innerHTML =
+        `<div class="aviso aviso-error" role="alert">${esc(SI.textos.app.errorCarga)}</div>`;
+      return;
+    }
     estado.vista = vistaDesdeHash();
     document.addEventListener('click', onClick);
     window.addEventListener('hashchange', () => {

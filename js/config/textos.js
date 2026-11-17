@@ -16,6 +16,9 @@ SI.textos = {
     restablecer: 'Restablecer datos de demostración',
     confirmarRestablecer: '¿Restablecer los datos de demostración? Se perderán los movimientos registrados en este navegador.',
     restablecido: 'Se restablecieron los datos de demostración.',
+    errorCarga: 'No se pudieron cargar los datos. Recarga la página; si el problema sigue, avisa al área de Sistemas.',
+    errorDatos: 'No se pudo completar la operación con los datos. Inténtalo de nuevo.',
+    avisoNoGuardado: 'El movimiento se aplicó, pero no se pudo guardar en este navegador: se perderá al recargar.',
     registrarMovimiento: 'Registrar movimiento',
     registrarMovimientoCorto: 'Movimiento'
   },

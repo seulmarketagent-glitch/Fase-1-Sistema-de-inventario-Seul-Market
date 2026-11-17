@@ -401,21 +401,33 @@ SI.vistas.formulario = (function () {
       enfocar('cantidad');
       return;
     }
-    if (b.dataset.mov === 'confirmar') {
-      const r = SI.movimientos.aplicar(f);
-      if (!r.ok) {
-        intento = true;
-        pintarFormulario();
-        pintarErrores(r);
-        SI.ui.toast(SI.textos.validacion.revisarErrores, 'error');
-        return;
-      }
-      const m = r.movimiento;
-      const p = r.calculo.producto;
-      dlg.close();
-      SI.ui.toast(SI.textos.confirmacion.movimiento(r.calculo.tipo.nombre, SI.conversiones.textoUnidades(p, m.unidades), `${p.sku} ${p.nombre}`), 'ok');
-      SI.app.refrescar();
+    if (b.dataset.mov === 'confirmar') confirmar(b);
+  }
+
+  async function confirmar(boton) {
+    if (boton.disabled) return;
+    boton.disabled = true; // evita registrar dos veces con doble clic
+    let r;
+    try {
+      r = await SI.repositorio.registrarMovimiento(f);
+    } catch (e) {
+      boton.disabled = false;
+      SI.ui.toast(SI.textos.app.errorDatos, 'error');
+      return;
     }
+    if (!r.ok) {
+      intento = true;
+      pintarFormulario();
+      pintarErrores(r);
+      SI.ui.toast(SI.textos.validacion.revisarErrores, 'error');
+      return;
+    }
+    const m = r.movimiento;
+    const p = r.calculo.producto;
+    dlg.close();
+    SI.ui.toast(SI.textos.confirmacion.movimiento(r.calculo.tipo.nombre, SI.conversiones.textoUnidades(p, m.unidades), `${p.sku} ${p.nombre}`), 'ok');
+    if (r.guardado === false) SI.ui.toast(SI.textos.app.avisoNoGuardado, 'error');
+    SI.app.refrescar();
   }
 
   function instalarEventos() {

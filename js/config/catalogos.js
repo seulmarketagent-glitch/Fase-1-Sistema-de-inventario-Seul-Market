@@ -15,9 +15,6 @@ SI.catalogos = {
   /** Ventana de días para el indicador "Movimientos recientes". */
   diasMovimientosRecientes: 7,
 
-  /** Clave de almacenamiento local del navegador (cámbiala para empezar de cero). */
-  claveAlmacenamiento: 'seul-market-inventario-demo-v1',
-
   /**
    * Unidades base de inventario. Todo saldo se guarda en la unidad base del producto.
    * decimales: 0 = solo cantidades enteras.

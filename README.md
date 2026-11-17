@@ -15,15 +15,40 @@ No requiere instalar nada.
 2. Haz doble clic en **`index.html`** (se abre en Chrome, Safari, Edge o Firefox actualizados).
 3. Para volver a los datos iniciales usa el botón **"Restablecer datos de demostración"** al pie de la página.
 
-Para verla en un celular, copia la carpeta al dispositivo o publícala en cualquier hosting estático. No necesita servidor de aplicaciones.
+### Opción alternativa: servidor local de solo lectura
+
+Si el navegador bloquea algo al abrir el archivo directamente, puedes servir la carpeta con el Python que traen las herramientas de Apple:
+
+```bash
+cd "/Users/salo/Desktop/Seul Market - Sistema de Inventario"
+```
+
+```bash
+/usr/bin/python3 -m http.server 8765 --bind 127.0.0.1
+```
+
+Luego abre `http://127.0.0.1:8765` en el navegador y detén el servidor con `Ctrl + C`. Solo es accesible desde este equipo. Los datos guardados con este método quedan separados de los guardados al abrir el archivo con doble clic, porque el navegador los trata como sitios distintos.
 
 ### Decisión técnica
 
-La carpeta estaba vacía y el equipo no tiene Node.js ni Python instalados. Por eso se eligió **HTML + CSS + JavaScript sin dependencias ni compilación**:
+Cuando se creó, la carpeta estaba vacía y el equipo no tenía Node.js. Hoy hay Python 3.9 incluido con las herramientas de Apple, pero esa versión ya no recibe soporte. Por eso se eligió **HTML + CSS + JavaScript sin dependencias ni compilación**:
 
 - Se abre con doble clic. No necesita `npm`, servidor ni conexión a internet.
 - Los scripts son clásicos (no módulos ES) porque los navegadores bloquean módulos al abrir archivos locales. Comparten un único espacio de nombres global: `window.SI`.
 - Si más adelante se adopta React, Vue u otro framework, las capas de **configuración**, **modelo** y **datos** se pueden reutilizar casi sin cambios.
+
+### Capas (desde la etapa "Fase 1 · Estructura")
+
+| Capa | Carpeta | Responsabilidad | Puede usar |
+|---|---|---|---|
+| Configuración | `js/config/`, `css/tokens.css` | Catálogos, textos, columnas, fuente de datos, diseño | Nada (solo datos) |
+| Lógica de negocio | `js/modelo/` | Conversiones, cálculos de stock, alertas, validación y aplicación de movimientos (FEFO, sin negativos). No lee ni guarda datos | Configuración |
+| Acceso a datos | `js/datos/` | `repositorio.js` es la única puerta para cargar, registrar y restablecer. `fuenteLocal.js` guarda en el navegador. `demo.js` genera los datos ficticios | Lógica de negocio y configuración |
+| Presentación | `js/ui/`, `js/app.js` | Pantallas, formularios y navegación. Leen del estado en memoria y **escriben solo a través del repositorio** | Todas las anteriores |
+
+Todas las escrituras del repositorio son asíncronas (devuelven una promesa). Así, cuando exista un servidor, se agrega una fuente nueva en `js/datos/` y se cambia `fuente` en `js/config/datos.js`, sin reescribir pantallas. En ese momento el servidor volverá a aplicar las reglas y los permisos; el navegador solo validará para dar mensajes rápidos.
+
+**Transición de datos:** la clave de almacenamiento (`seul-market-inventario-demo-v1`) y el formato no cambiaron, así que lo registrado antes de esta etapa se conserva. Si lo guardado está dañado, se muestra la demo y lo guardado no se borra hasta el siguiente registro.
 
 ---
 
@@ -119,12 +144,15 @@ js/
     catalogos.js               ← Categorías, ubicaciones, canales, estados, unidades base,
                                  tipos de movimiento, motivos, días de alerta
     textos.js                  ← Navegación, títulos, etiquetas, mensajes y validaciones
+    datos.js                   ← Fuente de datos activa y clave de almacenamiento local
     columnas.js                ← Columnas de la tabla de productos, filtros y ordenamientos
-  modelo/
+  modelo/                      LÓGICA DE NEGOCIO (no lee ni guarda datos)
     conversiones.js            Reglas de presentación ↔ unidad base
-    inventario.js              Estado, cálculo de stock, estados, alertas, indicadores, guardado
+    inventario.js              Estado en memoria, cálculo de stock, estados, alertas, indicadores
     movimientos.js             Validación y aplicación de movimientos (incluye FEFO de lotes)
-  datos/
+  datos/                       ACCESO A DATOS
+    repositorio.js             Única puerta: cargar, registrarMovimiento, restablecer (asíncronas)
+    fuenteLocal.js             Adaptador del navegador (localStorage), solo demostración
     demo.js                    ← Productos, presentaciones, lotes y movimientos ficticios
   ui/
     componentes.js             Formatos (CLP, fechas, números), insignias, KPI, toasts
@@ -142,4 +170,5 @@ Cambios frecuentes:
 - **Nuevo tipo de movimiento:** agrégalo en `tiposMovimiento`, con `efecto` entrada, salida, traslado o ajuste. El formulario y los filtros lo toman automáticamente.
 - **Ocultar o reordenar columnas:** usa `visible: false` o cambia el orden del arreglo en `js/config/columnas.js`.
 - **Equivalencias de empaque:** edita el arreglo `presentaciones` de cada producto en `js/datos/demo.js` (`factor` = unidades base por presentación).
-- **Volver a los datos demo después de editar `demo.js`:** usa "Restablecer datos de demostración" o cambia `claveAlmacenamiento` en `catalogos.js`.
+- **Volver a los datos demo después de editar `demo.js`:** usa "Restablecer datos de demostración" o cambia `local.clave` en `js/config/datos.js`.
+- **Nueva fuente de datos:** crea un adaptador en `js/datos/` con `leer`, `escribir`, `borrar` y `persistente` (ver el contrato en `fuenteLocal.js`), cárgalo en `index.html` y cámbialo en `js/config/datos.js`.

@@ -1,50 +1,27 @@
 /*
  * Estado del inventario y cálculos derivados (stock, estados, alertas, indicadores).
  *
- * Persistencia: SOLO en memoria + localStorage del navegador actual.
- * No hay base de datos ni integración externa.
+ * Capa de lógica de negocio: estado en memoria y cálculos puros.
+ * La lectura y el guardado viven en js/datos/ (repositorio + fuentes).
  */
 window.SI = window.SI || {};
 
 SI.inventario = (function () {
   const C = () => SI.catalogos;
-  const estadoApp = { productos: [], movimientos: [], persistente: false };
+  const estadoApp = { productos: [], movimientos: [] };
 
-  /* ---------- Carga y guardado ---------- */
+  /* ---------- Estado ---------- */
+  // Este módulo NO lee ni guarda datos: eso lo hace SI.repositorio (js/datos/).
 
-  function cargar() {
-    let datos = null;
-    try {
-      const crudo = window.localStorage.getItem(C().claveAlmacenamiento);
-      if (crudo) datos = JSON.parse(crudo);
-      estadoApp.persistente = true;
-    } catch (e) {
-      estadoApp.persistente = false;
-    }
-    if (!datos || !Array.isArray(datos.productos) || !Array.isArray(datos.movimientos)) {
-      datos = SI.datosDemo.generar();
-    }
+  /** Reemplaza el estado en memoria con los datos que entrega el repositorio. */
+  function establecer(datos) {
     estadoApp.productos = datos.productos;
     estadoApp.movimientos = datos.movimientos;
   }
 
-  function guardar() {
-    try {
-      window.localStorage.setItem(C().claveAlmacenamiento, JSON.stringify({
-        productos: estadoApp.productos,
-        movimientos: estadoApp.movimientos
-      }));
-      estadoApp.persistente = true;
-    } catch (e) {
-      estadoApp.persistente = false;
-    }
-  }
-
-  function restablecer() {
-    try { window.localStorage.removeItem(C().claveAlmacenamiento); } catch (e) { /* sin almacenamiento */ }
-    const datos = SI.datosDemo.generar();
-    estadoApp.productos = datos.productos;
-    estadoApp.movimientos = datos.movimientos;
+  /** Copia del estado para que el repositorio la guarde. */
+  function instantanea() {
+    return SI.util.clonar({ productos: estadoApp.productos, movimientos: estadoApp.movimientos });
   }
 
   /* ---------- Consultas ---------- */
@@ -139,11 +116,10 @@ SI.inventario = (function () {
   }
 
   return {
-    cargar, guardar, restablecer,
+    establecer, instantanea,
     productos, producto, movimientos, movimientosDe, agregarMovimiento,
     stockEn, fisico, disponible, sinLote, estado,
     lotesConSaldo, alertasVencimiento, tieneAlertaVencimiento, nivelAlerta,
-    indicadores,
-    get persistente() { return estadoApp.persistente; }
+    indicadores
   };
 })();

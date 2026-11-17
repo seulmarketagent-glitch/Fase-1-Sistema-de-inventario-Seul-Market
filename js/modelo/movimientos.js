@@ -170,7 +170,10 @@ SI.movimientos = (function () {
 
   /* ---------- Aplicación ---------- */
 
-  /** Valida y aplica el movimiento. Devuelve { ok, movimiento } o { ok:false, errores }. */
+  /**
+   * Valida y aplica el movimiento al estado en memoria. No guarda: eso lo hace
+   * SI.repositorio.registrarMovimiento. Devuelve { ok, movimiento } o { ok:false, errores }.
+   */
   function aplicar(d) {
     const v = validar(d);
     if (!v.ok) return v;
@@ -217,7 +220,6 @@ SI.movimientos = (function () {
       demo: false
     };
     SI.inventario.agregarMovimiento(movimiento);
-    SI.inventario.guardar();
     return { ok: true, movimiento, calculo: v.calculo };
   }
 
