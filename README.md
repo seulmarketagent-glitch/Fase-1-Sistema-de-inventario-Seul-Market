@@ -5,6 +5,14 @@ Primera interfaz funcional para revisar y administrar inventario.
 
 Área de Automatización y Sistemas: Mario Ulloa y Salomón Kim.
 
+**Estado por fases:**
+
+| Fase | Estado |
+|---|---|
+| Fase 1 · Estructura | Lista: presentación, lógica, configuración y acceso a datos separados |
+| Fase 2 · Modelo de datos | Lista: diseño en [`docs/modelo-de-datos.md`](docs/modelo-de-datos.md) y [`db/`](db/). **Aún no conectado** a la interfaz |
+| Fases 3 a 9 | Pendientes |
+
 ---
 
 ## 1. Cómo ejecutarla
@@ -134,6 +142,11 @@ Todas las escrituras del repositorio son asíncronas (devuelven una promesa). As
 
 ```
 index.html                     Estructura base y orden de carga de scripts
+db/                            MODELO DE DATOS (Fase 2, aún no conectado)
+  esquema.sql                  Tablas, restricciones, disparadores y vistas (SQLite)
+  datos-iniciales.sql          Roles, unidades, listas de precio, reglas de vencimiento, bodegas
+docs/
+  modelo-de-datos.md           Explicación del modelo, supuestos y pendientes
 css/
   tokens.css                   ← Colores, tipografía, espaciados, radios, sombras (variables CSS)
   base.css                     Layout general y responsive
